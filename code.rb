@@ -1,21 +1,31 @@
 #YOUR CODE GOES HERE
 require 'pry'
 def bracket_matched?(string)
-  return false if string.length.odd?
-  return false if string =~ /[^\[\]\(\)\{\}]/
 
-  pairs = { '{' => '}', '[' => ']', '(' => ')' }
-
+  brackets =  ['{', '}', '[', ']', '(', ')']
   stack = []
-  string.chars do |bracket|
-    if expectation = pairs[bracket]
-      stack << expectation
-    else
-      return false unless stack.pop == bracket
+
+  string.chars do |char|
+
+    if brackets.include?(char)
+      stack << char
     end
   end
 
-  stack.empty?
+  until stack.empty?
+
+    char1 = stack.pop
+    char2 = stack.pop
+
+    return true if char1 == '{' && char2 == '}' || char2 == '{' && char1 == '}'
+    return true if char1 == '[' && char2 == ']' || char2 == '[' && char1 == ']'
+    return true if char1 == '(' && char2 == ')' || char2 == '(' && char1 == ')'
+
+  end
+
+  return false
 end
 
-binding.pry
+
+puts bracket_matched?("Hi! What is your name again (I forgot)?")
+puts bracket_matched?("Hi! What is (your name again? I forgot")
